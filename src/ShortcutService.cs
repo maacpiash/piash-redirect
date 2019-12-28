@@ -5,29 +5,37 @@ using MongoDB.Driver;
 
 namespace Redirect
 {
-    public class ShortcutService : IShortcutService
+    public class ShortcutService
     {
-      private List<Shortcut> allShortcuts { get; set; }
+      private readonly IMongoCollection<Shortcut> _Shortcuts;
 
-      private IMongoCollection<Shortcut> allShortcutsCollection { get; set; }
+        public ShortcutService(IShortcutDbSettings settings)
+        {
+            var client = new MongoClient(settings.ConnectionString);
+            var database = client.GetDatabase(settings.DatabaseName);
 
-      public ShortcutService()
-      {
-        var client = new MongoClient("mongodb://username:password@ds056688.mlab.com:56688");
-        var database = client.GetDatabase("piash-redirect");
-        allShortcutsCollection = database.GetCollection<Shortcut>("shortcuts");
-        InitiateList();
-      }
+            _Shortcuts = database.GetCollection<Shortcut>(settings.CollectionName);
+        }
 
-      public async void InitiateList()
-      {
-        allShortcuts = await allShortcutsCollection.Find(x => true).ToListAsync();
-      }
+        public List<Shortcut> Get() =>
+            _Shortcuts.Find(Shortcut => true).ToList();
 
-      public async Task<Shortcut> GetOneShortcut(string key)
-      {
-        var list = await allShortcutsCollection.Find(x => x.ShortKey == key).ToListAsync();
-        return list.FirstOrDefault();
-      }
+        public Shortcut Get(string key) =>
+            _Shortcuts.Find<Shortcut>(Shortcut => Shortcut.ShortKey == key).FirstOrDefault();
+
+        public Shortcut Create(Shortcut Shortcut)
+        {
+            _Shortcuts.InsertOne(Shortcut);
+            return Shortcut;
+        }
+
+        public void Update(string id, Shortcut ShortcutIn) =>
+            _Shortcuts.ReplaceOne(Shortcut => Shortcut.Id == id, ShortcutIn);
+
+        public void Remove(Shortcut ShortcutIn) =>
+            _Shortcuts.DeleteOne(Shortcut => Shortcut.Id == ShortcutIn.Id);
+
+        public void Remove(string id) => 
+            _Shortcuts.DeleteOne(Shortcut => Shortcut.Id == id);
     }
 }

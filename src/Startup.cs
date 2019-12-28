@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 
 namespace Redirect
@@ -26,6 +27,12 @@ namespace Redirect
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.Configure<ShortcutDbSettings>(
+                Configuration.GetSection(nameof(ShortcutDbSettings)));
+
+            services.AddSingleton<IShortcutDbSettings>(sp =>
+                sp.GetRequiredService<IOptions<ShortcutDbSettings>>().Value);
+
             services.AddSingleton<ShortcutService>();
         }
 

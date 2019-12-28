@@ -19,9 +19,9 @@ namespace Redirect
         }
 
         [HttpGet("{pageKey}")]
-        public async Task<RedirectResult> Get(string pageKey)
+        public RedirectResult Get(string pageKey)
         {
-          string realUrl = (await _shortcutService.GetOneShortcut(pageKey)).RealUrl;
+          string realUrl = _shortcutService.Get(pageKey).RealUrl;
           if (realUrl is null)
             return Redirect("https://www.maacpiash.com/");
           return RedirectPermanent(realUrl);
