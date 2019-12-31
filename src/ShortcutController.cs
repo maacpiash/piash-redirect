@@ -10,9 +10,9 @@ namespace Redirect
     {
 
         private readonly ILogger<Shortcut> _logger;
-        private readonly ShortcutService _shortcutService;
+        private readonly IShortcutService _shortcutService;
 
-        public Controller(ILogger<Shortcut> logger, ShortcutService shortcutService)
+        public Controller(ILogger<Shortcut> logger, IShortcutService shortcutService)
         {
             _logger = logger;
             _shortcutService = shortcutService;
