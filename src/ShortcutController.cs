@@ -18,6 +18,9 @@ namespace Redirect
             _shortcutService = shortcutService;
         }
 
+        [HttpGet]
+        public RedirectResult Get() => Redirect("https://www.maacpiash.com/");
+
         [HttpGet("{pageKey}")]
         public RedirectResult Get(string pageKey)
         {
