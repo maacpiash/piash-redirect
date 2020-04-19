@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -23,6 +23,8 @@ namespace Redirect
         }
 
         public IConfiguration Configuration { get; }
+
+        static string BaseUrl = "https://www.maacpiash.com";
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -54,8 +56,21 @@ namespace Redirect
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllers();
+                endpoints.MapGet("/", context => RedirectRoUrl(context, BaseUrl));
+                endpoints.MapGet("/{pageKey}", context =>
+                {
+                    var pageKey = context.Request.Path.ToString().Split('/')[1];
+                    if (string.IsNullOrEmpty(pageKey))
+                        return RedirectRoUrl(context, BaseUrl);
+                    var service = app.ApplicationServices.GetRequiredService<IShortcutService>();
+                    var redirection = service.Get(pageKey);
+                    string url = redirection?.RealUrl ?? BaseUrl;
+                    return RedirectRoUrl(context, url);
+                });
             });
         }
+
+        Task RedirectRoUrl(HttpContext context, string url) =>
+            Task.Factory.StartNew(() => context.Response.Redirect(url));
     }
 }
