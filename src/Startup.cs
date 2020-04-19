@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel;
 
 namespace Redirect
 {
@@ -34,9 +35,17 @@ namespace Redirect
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(app))
+            {
+                string name = descriptor.Name;
+                object value = descriptor.GetValue(app);
+                Console.WriteLine("{0}={1}", name, value);
+            }
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                DotNetEnv.Env.Load("../.env");
             }
 
             app.UseHttpsRedirection();
