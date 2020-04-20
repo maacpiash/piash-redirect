@@ -1,4 +1,4 @@
-# Redirection software for [pia.sh](https://pia.sh)
+# Redirection handler for [pia.sh](http://pia.sh)
 
 [![Hosted on Heroku](https://img.shields.io/badge/Website-Hosted-brightgreen?logo=heroku&style=flat-square)](http://pia.sh)
 [![macOS Build Status](https://img.shields.io/github/workflow/status/maacpiash/piash-redirect/macOS?label=macOS&logo=apple&style=flat-square)](https://github.com/maacpiash/Connery/actions?query=workflow%3AmacOS)
