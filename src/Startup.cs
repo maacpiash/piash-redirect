@@ -56,21 +56,19 @@ namespace Redirect
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", context => RedirectRoUrl(context, BaseUrl));
+                endpoints.MapGet("/", context =>
+                    Task.Run(() => context.Response.Redirect(BaseUrl))
+                );
                 endpoints.MapGet("/{pageKey}", context =>
                 {
                     var pageKey = context.Request.Path.ToString().Split('/')[1];
                     if (string.IsNullOrEmpty(pageKey))
-                        return RedirectRoUrl(context, BaseUrl);
+                        return Task.Run(() => context.Response.Redirect(BaseUrl));
                     var service = app.ApplicationServices.GetRequiredService<IShortcutService>();
                     var redirection = service.Get(pageKey);
-                    string url = redirection?.RealUrl ?? BaseUrl;
-                    return RedirectRoUrl(context, url);
+                    return Task.Run(() => context.Response.Redirect(redirection?.RealUrl ?? BaseUrl));
                 });
             });
         }
-
-        Task RedirectRoUrl(HttpContext context, string url) =>
-            Task.Factory.StartNew(() => context.Response.Redirect(url));
     }
 }
