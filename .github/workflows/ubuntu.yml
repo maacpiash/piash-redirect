@@ -4,18 +4,23 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    
+
     steps:
-    - uses: actions/checkout@v1
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.101
-    - name: Display dotnet info
-      run: dotnet --info
-    - name: Build all projects
-      run: dotnet build
-    - name: Run unit tests
-      run: dotnet test test/Redirect.Tests.csproj
+      - uses: actions/checkout@v1
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.101
+      - name: Display dotnet info
+        run: dotnet --info
+      - name: Install Coverlet
+        run: dotnet tool install --global coverlet.console
+      - name: Build all projects
+        run: dotnet build
+      - name: Run unit tests
+        run: coverlet tests/bin/Debug/netcoreapp3.1/Redirect.Tests.dll --target "dotnet" --targetargs "test tests/Redirect.Tests.csproj --no-build" --format opencover
+      - name: Upload test coverage to Codecov
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+        run: bash <(curl -s https://codecov.io/bash)
