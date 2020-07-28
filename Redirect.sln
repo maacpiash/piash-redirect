@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Redirect", "src\Redirect.csproj", "{960455FF-0C3E-403A-9C75-9B771A851E23}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Redirect.Tests", "test\Redirect.Tests.csproj", "{4E4F1467-C52F-4251-BC27-AB631C93AE5E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Redirect.Tests", "tests\Redirect.Tests.csproj", "{4E4F1467-C52F-4251-BC27-AB631C93AE5E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
