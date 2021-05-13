@@ -30,20 +30,13 @@ namespace Redirect
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-
+            services.AddRazorPages();
             services.AddSingleton<IShortcutService, ShortcutService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(app))
-            {
-                string name = descriptor.Name;
-                object value = descriptor.GetValue(app);
-                Console.WriteLine("{0}={1}", name, value);
-            }
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -59,6 +52,7 @@ namespace Redirect
                 endpoints.MapGet("/", context =>
                     Task.Run(() => context.Response.Redirect(BaseUrl))
                 );
+                endpoints.MapRazorPages();
                 endpoints.MapGet("/{pageKey}", context =>
                 {
                     var pageKey = context.Request.Path.ToString().Split('/')[1];
