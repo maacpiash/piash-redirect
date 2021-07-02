@@ -1,3 +1,11 @@
+![Abandoned](https://img.shields.io/badge/Abandoned-%23ff0000.svg?&style=for-the-badge)
+
+Since [Vercel](https://vercel.com) lets users host full-stack Next.js applications with custom domains and ssl certificates for free, there is no need to host this ASP.NET Core app with paid dynos on Heroku, just to get the same functionalities.
+
+Please see my similar project, [piash-redirect-nextjs](https://github.com/maacpiash/piash-redirect-nextjs).
+
+<hr/>
+
 # Redirection handler for [pia.sh](http://pia.sh)
 
 [![Hosted on Heroku](https://img.shields.io/badge/Website-Hosted-brightgreen?logo=heroku&style=flat-square)](http://pia.sh)
